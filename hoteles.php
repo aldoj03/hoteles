@@ -44,8 +44,17 @@ function get_hotels_filtered_request(WP_REST_Request $params){
 	// wp_send_json($params->get_params());
 	$apiKey = "625f4c71c0828f829bd1c878b4f6c3d6";  
     $Secret = "e805df16c7";
-    $xsignature = hash("sha256", $apiKey.$Secret.time());
-	wp_send_json( getHotelsRooms($apiKey,$xsignature,$arrayIds));
+	$xsignature = hash("sha256", $apiKey.$Secret.time());
+	$array_ids = [];
+
+	$response =  getHotelsRooms($apiKey,$xsignature);
+	$response_decoded = json_decode($response);
+	foreach ($response_decoded->hotels->hotels as $key => $value) {
+		
+		array_push($array_ids , $value->code);
+		
+	}
+	wp_send_json($value->code);
 
 }
 
@@ -57,57 +66,8 @@ function preprareUrl( $params){
 
 
 
-function get_hotels_request(WP_REST_Request $params){
-	$url = 'https://api.test.hotelbeds.com/hotel-content-api/1.0/hotels?language=CAS';
-
-	if(count($params->get_params()) > 0){
-		 $url = $url . '&'. http_build_query($params->get_params());
-	}
-
-    $apiKey = "625f4c71c0828f829bd1c878b4f6c3d6";  
-    $Secret = "e805df16c7";
-    $xsignature = hash("sha256", $apiKey.$Secret.time());
-// var_dump($url);
-    
-    
-$getHoteles_array = json_decode( getHotels($url,$apiKey,$xsignature) );
-$arrayIds = array();
-// var_dump($getHoteles_array);
-// die();
-foreach ($getHoteles_array->hotels as $key => $value) {
-	array_push($arrayIds,$value->code);
-	unset($value->rooms);
-	unset($value->facilities);
-    unset($value->issues);
-    if($value->images){
-
-        $value->images = array_slice($value->images,0, 5);
-    }
-}
-
-
-
-
-
-
-$getHotelsRooms_array = json_decode(getHotelsRooms($apiKey,$xsignature, $arrayIds) );
-
-// var_dump($getHotelsRooms_array->hotels->hotels);
-// die();
-$arrayTotal = commbineArrays($getHotelsRooms_array->hotels->hotels, $getHoteles_array);
-
-
-
-wp_send_json($arrayTotal);
-
-// echo '<script>console.log('.json_encode($arrayTotal ) .')</script>';
-}
-
-
-
-
 //obtiene lista de hoteles
-function getHotels($url,$apiKey,$xsignature){
+function getHotels_details($url,$apiKey,$xsignature){
 
 	$getHotelsResponse  = wp_remote_get( $url, array(
 		'headers'=> array(
@@ -155,20 +115,9 @@ $arrayTosend = array();
 
 
     //obtiene disponibilidad de habitaciones segun parametros
-function getHotelsRooms($apiKey,$xsignature,$arrayIds){
+function getHotelsRooms($apiKey,$xsignature){
 
-	// $body = array(
-	// 	'hotels' =>array("hotel"=> $arrayIds),
-	// 	"stay"=> array(
-	// 		"checkIn"=>"2021-06-15",
-	// 		"checkOut"=> "2021-06-20"
-	// 	),
-	// 	"occupancies"=> array(
-	// 		array("rooms"=> 2,
-	// 		"adults"=> 2,
-	// 		"children"=> 0)
-	
-	// 	));
+
 	$body = array(
 		"geolocation"=>array("latitude"=> 39.57119,
 			"longitude"=> 2.646633999999949,
