@@ -184,23 +184,23 @@ function hot_form_request__function()
     $checkOut = date("Y-m-d",strtotime($checkIn."+ 30 days"));
 
 	$form = '
-	 <form action="" method="POST">
+	 <form action="" method="POST" style="display: flex">
 	 <input type="hidden" value="hotels_form" name="action">
 	 	<div>
-		 	<h4>Lugar</h4>
-			 <select name="lugar" id=""></select>
+		 	<h4>Destino</h4>
+			 <input type="text" size="25">
 		 </div>
-	 	<div>
+	 	<div style="display: flex;margin-left: 2vw;">
 			<div>
 				<h4>Entrada</h4>
 				<input type="date" name="entrada" id=""  min="'.$checkIn.'" required>
 			</div>
-			<div>
+			<div style="margin-left: 2vw;">
 				<h4>Salida</h4>
 				<input type="date" name="salida" id="" min="'.$checkIn.'" max="'.$checkOut.'"  required>
 			</div>
 		 </div>
-		 <div>
+		 <div style="margin-left: 2vw;">
 		 	<h4>Habitaciones</h4>
 			 <div>
 				 <h5>Adultos</h5>
@@ -215,7 +215,9 @@ function hot_form_request__function()
 				 <input type="number" name="habitaciones" id="" required>
 			 </div>
 		 </div>
-		 <button type="sumbmit" >Enviar</button>
+		 <div style="display: flex;align-items: center;margin-left: 2vw;">
+		 	<button type="sumbmit" >Enviar</button>
+		 </div>
 	 </form>
 	';
 	return $form;
