@@ -30,16 +30,10 @@ function add_custom_users_api()
 		]
 	);
 	//filtrar request
-	register_rest_route(
-		'wphot/v1',
-		'hoteles/filtered',
-		[
-			'methods' => 'POST',
-			'callback' => 'handle_get_hotels_filtered_request',
-		]
-	);
+	
 }
 
+//get post hotel
 function get_hotels_request(WP_REST_Request $params)
 {
 	$post_id = $params->get_param('id');
@@ -47,19 +41,10 @@ function get_hotels_request(WP_REST_Request $params)
 	wp_send_json(unserialize($result->post_content));
 }
 
-function handle_get_hotels_filtered_request(WP_REST_Request $params)
-{
-	$query = "";
-	$query2 = "";
-	$results = get_hotels_filtered_request($query, $query2);
-	wp_send_json($results);
-}
 
+// get hoteles
 function get_hotels_filtered_request($query, $query2)
 {
-
-
-
 
 
 	$apiKey = API_KEY;
@@ -84,16 +69,12 @@ function get_hotels_filtered_request($query, $query2)
 	return $final_array;
 }
 
-function preprareUrl($params)
-{
-
-	return   http_build_query($params);
-}
 
 
 
 
-//obtiene lista de hoteles
+
+//obtiene detalles de los hoteles
 function getHotels_details($apiKey, $xsignature, $ids)
 {
 
@@ -116,7 +97,7 @@ function getHotels_details($apiKey, $xsignature, $ids)
 }
 
 
-//inserta habitaciones dispobibles en array de hoteles
+//inserta detalles de hotel en primer array
 
 function commbineArrays($arrayHotels, $arrayDetails)
 {
@@ -192,7 +173,7 @@ function getHotelsRooms($apiKey, $xsignature, $query, $query2)
 
 
 
-// function that runs when shortcode is called
+// shortcode form
 function hot_form_request__function()
 {
 
@@ -234,14 +215,14 @@ function hot_form_request__function()
 	';
 	return $form;
 }
-// register shortcode
+
 add_shortcode('hot-form-request', 'hot_form_request__function');
 
 
 
 add_shortcode('hot-results-page', 'hot_results_page__function');
 
-
+// results angular shortcode
 function hot_results_page__function()
 {
 
@@ -269,7 +250,7 @@ function hot_results_page__function()
 	return $page;
 }
 
-
+// get form data
 function hot_handle_post_request()
 {
 	/**
@@ -306,6 +287,7 @@ function hot_handle_post_request()
 add_action('init', 'hot_handle_post_request');
 
 
+// activate plugin
 function hot_activate_plugin()
 {
 
