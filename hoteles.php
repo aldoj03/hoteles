@@ -164,6 +164,8 @@ function getHotelsRooms($apiKey, $xsignature, $query, $query2)
 			'timeout' => 10
 		)
 	);
+//    var_dump($responseHotelsRooms);
+//    die();
 	if (is_array($responseHotelsRooms) && !is_wp_error($responseHotelsRooms)) {
 		return wp_remote_retrieve_body($responseHotelsRooms);
 	} else {
@@ -177,7 +179,10 @@ function getHotelsRooms($apiKey, $xsignature, $query, $query2)
 function hot_form_request__function()
 {
 
-	// Things that you want to do. 
+	// Things that you want to do.
+    $checkIn = date("Y-m-d");
+    $checkOut = date("Y-m-d",strtotime($checkIn."+ 30 days"));
+
 	$form = '
 	 <form action="" method="POST">
 	 <input type="hidden" value="hotels_form" name="action">
@@ -188,11 +193,11 @@ function hot_form_request__function()
 	 	<div>
 			<div>
 				<h4>Entrada</h4>
-				<input type="date" name="entrada" id="" required>
+				<input type="date" name="entrada" id=""  min="'.$checkIn.'" required>
 			</div>
 			<div>
 				<h4>Salida</h4>
-				<input type="date" name="salida" id="" required>
+				<input type="date" name="salida" id="" min="'.$checkIn.'" max="'.$checkOut.'"  required>
 			</div>
 		 </div>
 		 <div>
