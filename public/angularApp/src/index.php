@@ -1,6 +1,6 @@
 
 <?php 
-include "../../../../../wp-load.php";
+include "../../../../../../wp-load.php";
 
 $base    = plugin_dir_url( __FILE__ )  ;
 $runtime    = plugin_dir_url( __FILE__ )  . 'runtime.js';
