@@ -174,8 +174,8 @@ class Hoteles {
 		$routes = new Hoteles_routes( $this->get_plugin_name(), $this->get_version() );
 
 		$this->loader->add_action('rest_api_init', $routes , 'get_all_routes');
-
 	}
+	
 
 
 	/**

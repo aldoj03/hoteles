@@ -80,12 +80,13 @@ class Hoteles_Public
 	public	function handle_post_request()
 	{
 
-
-		if (isset($_POST['action']) && isset($_POST['action']) == 'hotels_form') {
-			$query = $_POST['entrada'];
-			$query2 = $_POST['salida'];
+		if (isset($_POST['action']) && $_POST['action'] === 'hotels_form') {
+		
+			$checkIn = $_POST['entrada'];
+			$checkOut = $_POST['salida'];
 			$result_array = new stdClass();
-			$result_array->hotels = $this->get_hotels_filtered_request($query, $query2);
+			
+			$result_array->hotels = $this->get_hotels_filtered_request($checkIn, $checkOut);
 			
 			if (isset($result_array->hotels)) {
 				$hotels_array_string =  serialize($result_array->hotels);
@@ -95,7 +96,10 @@ class Hoteles_Public
 					'post_type'    => 'hoteles',
 
 				);
-				$id_post = wp_insert_post($post_arr);
+				
+				$id_post = wp_insert_post($post_arr,true );
+				
+				
 				wp_redirect(rtrim(get_permalink(get_page_by_title('Resultado Hoteles'))) . '?id="' . $id_post);
 			}
 
@@ -115,19 +119,23 @@ class Hoteles_Public
 		$array_ids = [];
 
 		$response = $this->getHotelsRooms($apiKey, $xsignature, $query, $query2);
+		
 		$response_decoded = json_decode($response);
-
+		
 		$final_array = new stdClass();
 		foreach ($response_decoded->hotels->hotels as $key => $value) {
 
 			array_push($array_ids, $value->code);
 		}
 		$reponse_details = json_decode($this->getHotels_details($apiKey, $xsignature, $array_ids));
+		
 		$final_array->hotels = $this->commbineArrays($response_decoded, $reponse_details);
 		$final_array->checkDays = new stdClass();
 		$final_array->checkDays->checkIn = $response_decoded->hotels->checkIn;
 		$final_array->checkDays->checkOut = $response_decoded->hotels->checkOut;
 		$final_array->checkDays->total = $response_decoded->hotels->total;
+		// var_dump($final_array);
+		// die();
 		return $final_array;
 	}
 
@@ -143,7 +151,7 @@ class Hoteles_Public
 		$ids_string = implode(',', $ids);
 		// wp_send_json($ids_string);
 
-		$url = 'https://api.test.hotelbeds.com/hotel-content-api/1.0/hotels?codes=' . $ids_string . '&language=CAS&fields=ranking,description,images';
+		$url = 'https://api.test.hotelbeds.com/hotel-content-api/1.0/hotels?codes=' . $ids_string . '&language=CAS&fields=ranking,description,images,boardCodes';
 
 		$getHotelsResponse  = wp_remote_get($url, array(
 			'headers' => array(
@@ -155,6 +163,8 @@ class Hoteles_Public
 			),
 			'timeout' => 8
 		));
+		// var_dump($getHotelsResponse);
+		// die();
 		return wp_remote_retrieve_body($getHotelsResponse);
 	}
 
@@ -171,6 +181,8 @@ class Hoteles_Public
 				if ($details->code == $hotel->code) {
 					$hotel->description = $details->description;
 					$hotel->ranking = $details->ranking;
+				
+					$hotel->boardCodes = $details->boardCodes;
 					$hotel->images = $details->images[0];
 					array_push($arrayTosend, $hotel);
 				}
@@ -190,12 +202,12 @@ class Hoteles_Public
 			"geolocation" => array(
 				"latitude" => 39.57119,
 				"longitude" => 2.646633999999949,
-				"radius" => 10,
+				"radius" => 20,
 				"unit" => "km"
 
 			),
 			"filter" => array(
-				"maxHotels" => 20
+				"maxHotels" => 70
 			),
 
 			"stay" => array(
@@ -226,8 +238,7 @@ class Hoteles_Public
 				'timeout' => 15
 			)
 		);
-		 var_dump($responseHotelsRooms);
-		 die();
+		
 		if (is_array($responseHotelsRooms) && !is_wp_error($responseHotelsRooms)) {
 			return wp_remote_retrieve_body($responseHotelsRooms);
 		} else {
