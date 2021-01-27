@@ -225,7 +225,7 @@ class Hoteles_Public
 
 		);
 		$responseHotelsRooms = wp_remote_post(
-			'https://api.test.hotelbeds.com/hotel-api/1.0/hotels',
+			'https://api.test.hotelbeds.com/hotel-api/1.0/hotels?language=CAS',
 			array(
 				'headers' => array(
 					'Accept' => 'application/json',

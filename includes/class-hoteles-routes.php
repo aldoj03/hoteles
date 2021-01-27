@@ -32,6 +32,14 @@ class Hoteles_routes{
                 'callback' => [$this,'get_hotels_request'],
             ]
         );
+        register_rest_route(
+            'wphot/v1',
+            'hotel',
+            [
+                'methods' => 'GET',
+                'callback' => [$this,'get_single_hotel_request'],
+            ]
+        );
     }
 
     public function get_hotels_request( WP_REST_Request $params ){
@@ -48,9 +56,32 @@ class Hoteles_routes{
         wp_send_json($objectArray);
     }
     
-    public function add_cors_http_header(){
+    public function add_cors_http_header(  ){
 		header("Access-Control-Allow-Origin: *");
-	}
+    }
+    
+    public function get_single_hotel_request( WP_REST_Request $params ){
+        $hotel_id = $params->get_param('id');
+        $apiKey = API_KEY;
+		$Secret = SECRET;
+        $xsignature = hash("sha256", $apiKey . $Secret . time());
+
+		$url = 'https://api.test.hotelbeds.com/hotel-content-api/1.0/hotels/'.$hotel_id.'/details?language=CAS';
+
+        
+        $getHotelsResponse  = wp_remote_get($url, array(
+			'headers' => array(
+				'Accept' => 'application/json',
+				'Accept-Encoding' => 'application/gzip',
+				'Content-Type' => 'application/json',
+				'Api-key' => $apiKey,
+				'X-Signature' => $xsignature
+			),
+			'timeout' => 8
+		));
+		
+		wp_send_json(wp_remote_retrieve_body($getHotelsResponse));
+    }
 
     
 }
