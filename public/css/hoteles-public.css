@@ -10,3 +10,27 @@
     max-width: unset !important;
     bottom: 0 !important
 }
+#searchHotels{
+    display: flex;
+    background-color: rgba(0, 0, 0, 0.75);
+    color: white;
+    max-width: 1000004%;
+    width: 111%;
+    padding: 20px;
+    font-family: sans-serif;
+}
+.height_inputs{
+    height: 35px;
+}
+#adultos_select{
+    margin-left: 3.5vw;
+}
+#niños_select{
+    margin-left: 4.35vw;
+}
+#habitaciones_select{
+    margin-left: 0.8vw;
+}
+.formLabel{
+    font-size: 16px;
+}
