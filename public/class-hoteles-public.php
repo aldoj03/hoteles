@@ -255,39 +255,50 @@ class Hoteles_Public
 		$checkOut = date("Y-m-d", strtotime($checkIn . "+ 30 days"));
 
 		$form = '
-	 <form action="" method="POST" style="display: flex">
+	 <form action="" id="searchHotels" method="POST" style="display: flex;justify-content: center;">
 	 <input type="hidden" value="hotels_form" name="action">
 	 	<div>
-		 	<h4>Destino</h4>
-			 <input type="text" size="25">
+		 	<label class="formLabel">Destino</label><br>
+			 <input type="text" size="25" class="height_inputs">
 		 </div>
-	 	<div style="display: flex;margin-left: 2vw;">
-			<div>
-				<h4>Entrada</h4>
-				<input type="date" name="entrada" id=""  min="' . $checkIn . '" required>
+	 	<div style="display: flex;margin-left: 1vw;">
+			<div style="margin-right: -5vw;">
+				<label class="formLabel">Entrada</label><br>
+				<input type="date" class="height_inputs" name="entrada" id=""  min="' . $checkIn . '" required>
 			</div>
-			<div style="margin-left: 2vw;">
-				<h4>Salida</h4>
-				<input type="date" name="salida" id="" min="' . $checkIn . '" max="' . $checkOut . '"  required>
+			<div style="margin-left: 5vw;">
+				<label class="formLabel">Salida</label><br>
+				<input type="date" class="height_inputs" name="salida"  id="" min="' . $checkIn . '" max="' . $checkOut . '"  required>
 			</div>
 		 </div>
-		 <div style="margin-left: 2vw;">
-		 	<h4>Habitaciones</h4>
+		 <div style="margin-left: 4vw;">
 			 <div>
-				 <h5>Adultos</h5>
-				 <input type="number" name="adultos" id="" required>
+				<label class="formLabel">Adultos</label>
+				<select id="adultos_select" class="height_inputs" required>
+					<option value="1">1</option>
+					<option value="2" selected>2</option>
+					<option value="3">3</option>
+				</select>
 			 </div>
 			 <div>
-				 <h5>Niños</h5>
-				 <input type="number" name="ninos" id="" required>
+			 	<label class="formLabel">Niños</label>
+				<select id="niños_select" class="height_inputs" required>
+					<option value="1">1</option>
+					<option value="2" selected>2</option>
+					<option value="3">3</option>
+				</select>
 			 </div>
 			 <div>
-				 <h5>Habitaciones</h5>
-				 <input type="number" name="habitaciones" id="" required>
+			 	<label class="formLabel">Habitaciones</label>
+				<select id="habitaciones_select" class="height_inputs" required>
+					<option value="1">1</option>
+					<option value="2" selected>2</option>
+					<option value="3">3</option>
+				</select>
 			 </div>
 		 </div>
 		 <div style="display: flex;align-items: center;margin-left: 2vw;">
-		 	<button type="sumbmit" >Enviar</button>
+		 	<button type="sumbmit" style="padding: 9px;font-size: 15px;">ENVIAR</button>
 		 </div>
 	 </form>
 	';
