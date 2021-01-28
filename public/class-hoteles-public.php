@@ -119,7 +119,7 @@ class Hoteles_Public
 		$array_ids = [];
 
 		$response = $this->getHotelsRooms($apiKey, $xsignature, $query, $query2);
-		
+				wp_send_json($response);
 		$response_decoded = json_decode($response);
 		
 		$final_array = new stdClass();
