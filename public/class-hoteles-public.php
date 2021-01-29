@@ -24,10 +24,10 @@ class Hoteles_Public
 
 	private $plugin_name;
 
-	
+
 	private $version;
 
-	
+
 
 	public function __construct($plugin_name, $version)
 	{
@@ -47,12 +47,12 @@ class Hoteles_Public
 	public function enqueue_styles()
 	{
 
-		
+
 
 		wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/hoteles-public.css', array(), $this->version, 'all');
 	}
 
-	
+
 	public function enqueue_scripts()
 	{
 
@@ -64,7 +64,7 @@ class Hoteles_Public
 	// results angular shortcode
 	public	function hot_results_page__function()
 	{
-		echo '<script>window.localStorage.setItem("apiWpUrl","'.home_url().'")</script>';
+		echo '<script>window.localStorage.setItem("apiWpUrl","' . home_url() . '")</script>';
 
 		$urlBase = plugin_dir_url(__FILE__) . 'angularApp/src/index.php#' . $_GET['id'];
 		$page = '<style>
@@ -82,13 +82,24 @@ class Hoteles_Public
 	{
 
 		if (isset($_POST['action']) && $_POST['action'] === 'hotels_form') {
-		
+
 			$checkIn = $_POST['entrada'];
 			$checkOut = $_POST['salida'];
+			$adultos = $_POST['adultos'];
+			$ninos = $_POST['ninos'];
+			$habitaciones = $_POST['habitaciones'];
+			$data_query = array(
+				"checkIn"=>$checkIn,
+				"checkOut"=>$checkOut,
+				"adultos"=>$adultos,
+				"ninos"=>$ninos,
+				"habitaciones"=>$habitaciones,
+
+			);
 			$result_array = new stdClass();
-			
-			$result_array->hotels = $this->get_hotels_filtered_request($checkIn, $checkOut);
-			
+
+			$result_array->hotels = $this->get_hotels_filtered_request($data_query);
+
 			if (isset($result_array->hotels)) {
 				$hotels_array_string =  serialize($result_array->hotels);
 
@@ -97,10 +108,10 @@ class Hoteles_Public
 					'post_type'    => 'hoteles',
 
 				);
-				
-				$id_post = wp_insert_post($post_arr,true );
-				
-				
+
+				$id_post = wp_insert_post($post_arr, true);
+
+
 				wp_redirect(rtrim(get_permalink(get_page_by_title('Resultado Hoteles'))) . '?id="' . $id_post);
 			}
 
@@ -110,7 +121,7 @@ class Hoteles_Public
 
 
 	// get hoteles
-	public	function get_hotels_filtered_request($query, $query2)
+	public	function get_hotels_filtered_request($data_query)
 	{
 
 
@@ -119,17 +130,16 @@ class Hoteles_Public
 		$xsignature = hash("sha256", $apiKey . $Secret . time());
 		$array_ids = [];
 
-		$response = $this->getHotelsRooms($apiKey, $xsignature, $query, $query2);
-				wp_send_json($response);
+		$response = $this->getHotelsRooms($apiKey, $xsignature, $data_query);
 		$response_decoded = json_decode($response);
-		
+
 		$final_array = new stdClass();
 		foreach ($response_decoded->hotels->hotels as $key => $value) {
 
 			array_push($array_ids, $value->code);
 		}
 		$reponse_details = json_decode($this->getHotels_details($apiKey, $xsignature, $array_ids));
-		
+
 		$final_array->hotels = $this->commbineArrays($response_decoded, $reponse_details);
 		$final_array->checkDays = new stdClass();
 		$final_array->checkDays->checkIn = $response_decoded->hotels->checkIn;
@@ -182,7 +192,7 @@ class Hoteles_Public
 				if ($details->code == $hotel->code) {
 					$hotel->description = $details->description;
 					$hotel->ranking = $details->ranking;
-				
+
 					$hotel->boardCodes = $details->boardCodes;
 					$hotel->images = $details->images[0];
 					array_push($arrayTosend, $hotel);
@@ -195,7 +205,7 @@ class Hoteles_Public
 
 
 	//obtiene disponibilidad de habitaciones segun parametros
-	public function getHotelsRooms($apiKey, $xsignature, $query, $query2)
+	public function getHotelsRooms($apiKey, $xsignature, $data_query)
 	{
 
 
@@ -212,14 +222,14 @@ class Hoteles_Public
 			),
 
 			"stay" => array(
-				"checkIn" => $query,
-				"checkOut" => $query2
+				"checkIn" => $data_query['checkIn'],
+				"checkOut" => $data_query['checkOut']
 			),
 			"occupancies" => array(
 				array(
-					"rooms" => 2,
-					"adults" => 2,
-					"children" => 0
+					"rooms" => $data_query['habitaciones'],
+					"adults" => $data_query['adultos'],
+					"children" => $data_query['ninos']
 				)
 
 			)
@@ -239,7 +249,7 @@ class Hoteles_Public
 				'timeout' => 15
 			)
 		);
-		
+
 		if (is_array($responseHotelsRooms) && !is_wp_error($responseHotelsRooms)) {
 			return wp_remote_retrieve_body($responseHotelsRooms);
 		} else {
@@ -265,33 +275,47 @@ class Hoteles_Public
 	 	<div style="display: flex;margin-left: 1vw;">
 			<div style="margin-right: -5vw;">
 				<label class="formLabel">Entrada</label><br>
-				<input type="date" class="height_inputs" name="entrada" id=""  min="' . $checkIn . '" required>
+				<input type="date" class="height_inputs" name="entrada" id="checkIn"  min="' . $checkIn . '" required>
 			</div>
 			<div style="margin-left: 5vw;">
 				<label class="formLabel">Salida</label><br>
-				<input type="date" class="height_inputs" name="salida"  id="" min="' . $checkIn . '" max="' . $checkOut . '"  required>
+				<input type="date" class="height_inputs" name="salida"  id="checkOut" min="' . $checkIn . '" max="' . $checkOut . '"  required>
 			</div>
 		 </div>
 		 <div style="margin-left: 4vw;">
 			 <div>
 				<label class="formLabel">Adultos</label>
-				<select id="adultos_select" class="height_inputs" required>
+				<select id="adultos_select" name="adultos" class="height_inputs" required>
+					<option value="0" selected>0</option>
 					<option value="1">1</option>
-					<option value="2" selected>2</option>
+					<option value="2">2</option>
 					<option value="3">3</option>
+					<option value="4">4</option>
+					<option value="5">5</option>
+					<option value="6">6</option>
+					<option value="7">7</option>
+					<option value="8">8</option>
+					<option value="9">9</option>
 				</select>
 			 </div>
 			 <div>
 			 	<label class="formLabel">Niños</label>
-				<select id="niños_select" class="height_inputs" required>
-					<option value="1">1</option>
-					<option value="2" selected>2</option>
-					<option value="3">3</option>
+				<select id="ninos_select" name="ninos" class="height_inputs" required>
+				<option value="0" selected>0</option>
+				<option value="1">1</option>
+				<option value="2" >2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>
+				<option value="6">6</option>
+				<option value="7">7</option>
+				<option value="8">8</option>
+				<option value="9">9</option>
 				</select>
 			 </div>
 			 <div>
 			 	<label class="formLabel">Habitaciones</label>
-				<select id="habitaciones_select" class="height_inputs" required>
+				<select id="habitaciones_select" name="habitaciones" class="height_inputs" required>
 					<option value="1">1</option>
 					<option value="2" selected>2</option>
 					<option value="3">3</option>
@@ -299,7 +323,7 @@ class Hoteles_Public
 			 </div>
 		 </div>
 		 <div style="display: flex;align-items: center;margin-left: 2vw;">
-		 	<button type="sumbmit" style="padding: 9px;font-size: 15px;">ENVIAR</button>
+		 	<button type="sumbmit" id="submit_hotels_form" style="padding: 9px;font-size: 15px;">ENVIAR</button>
 		 </div>
 	 </form>
 	';
