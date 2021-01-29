@@ -64,6 +64,7 @@ class Hoteles_Public
 	// results angular shortcode
 	public	function hot_results_page__function()
 	{
+		echo '<script>window.localStorage.setItem("apiWpUrl","'.home_url().'")</script>';
 
 		$urlBase = plugin_dir_url(__FILE__) . 'angularApp/src/index.php#' . $_GET['id'];
 		$page = '<style>
@@ -119,7 +120,7 @@ class Hoteles_Public
 		$array_ids = [];
 
 		$response = $this->getHotelsRooms($apiKey, $xsignature, $query, $query2);
-		
+				wp_send_json($response);
 		$response_decoded = json_decode($response);
 		
 		$final_array = new stdClass();

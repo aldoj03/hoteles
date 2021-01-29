@@ -5,7 +5,6 @@ include "../../../../../../wp-load.php";
 $base    = plugin_dir_url( __FILE__ )  ;
 $runtime    = plugin_dir_url( __FILE__ )  . 'runtime.js';
 $polyfills  = plugin_dir_url( __FILE__ )  . 'polyfills.js';
-$scripts    = plugin_dir_url( __FILE__ )  . '4.js';
 $main       = plugin_dir_url( __FILE__ )  . 'main.js';
 $styles     = plugin_dir_url( __FILE__ )  . 'styles.css';
 ?>
