@@ -64,6 +64,7 @@ class Hoteles_Public
 	// results angular shortcode
 	public	function hot_results_page__function()
 	{
+		echo '<script>window.localStorage.setItem("apiWpUrl","'.home_url().'")</script>';
 
 		$urlBase = plugin_dir_url(__FILE__) . 'angularApp/src/index.php#' . $_GET['id'];
 		$page = '<style>
