@@ -259,7 +259,7 @@ class Hoteles_Public
 	 <input type="hidden" value="hotels_form" name="action">
 	 	<div>
 		 	<label class="formLabel">Destino</label><br>
-			 <input type="text" size="25" class="height_inputs">
+			<input type="text" size="25" id="site_input" class="height_inputs">
 		 </div>
 	 	<div style="display: flex;margin-left: 1vw;">
 			<div style="margin-right: -5vw;">
