@@ -261,6 +261,9 @@ class Hoteles_Public
 	 	<div>
 		 	<label class="formLabel">Destino</label><br>
 			<input type="text" size="25" id="site_input" class="height_inputs">
+			<br>
+			<select id="select_input">
+			</select>
 		 </div>
 	 	<div style="display: flex;margin-left: 1vw;">
 			<div style="margin-right: -5vw;">

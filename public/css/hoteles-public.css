@@ -22,6 +22,14 @@
 .height_inputs{
     height: 35px;
 }
+#select_input{
+    width: 12.2em;
+    font-family: sans-serif;
+}
+#site_input{
+    width: 12.2em;
+    font-family: sans-serif;
+}
 #adultos_select{
     margin-left: 3.5vw;
 }
