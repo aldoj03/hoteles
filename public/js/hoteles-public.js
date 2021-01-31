@@ -34,18 +34,24 @@ jQuery(document).ready(function( $ ){
     let site = document.getElementById("site_input")
     let doneTypingInterval = 1000
 
-    site.addEventListener('keyup', function (tecla) {
 
-            let select = document.getElementById("select_input")
-            clearTimeout(typingTimer);
-            typingTimer = setTimeout(() => doneTyping(site.value), doneTypingInterval);
-   
-      });
-    
-    
-    site.addEventListener('keydown', function () {
-        clearTimeout(typingTimer);
-    });
+
+      if(site){
+          site.addEventListener('keyup', function (tecla) {
+
+              let select = document.getElementById("select_input")
+              clearTimeout(typingTimer);
+              typingTimer = setTimeout(() => doneTyping(site.value), doneTypingInterval);
+
+          });
+
+
+          site.addEventListener('keydown', function () {
+              clearTimeout(typingTimer);
+          });
+      }
+
+
 
 
 
