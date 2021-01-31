@@ -142,9 +142,17 @@ class Hoteles_Public
 
 			$result_array->hotels = $this->get_hotels_filtered_request($data_query);
 			$this->handle_post_request_xml($data_query);
+	
 			if (isset($result_array->hotels)) {
-				$hotels_array_string =  serialize($result_array->hotels);
+                $file = fopen("hotelesConsulta.txt", "w");
 
+
+
+
+				$hotels_array_string =  serialize($result_array->hotels);
+                fwrite($file, $hotels_array_string . PHP_EOL);
+
+                fclose($file);
 				$post_arr = array(
 					'post_content' => $hotels_array_string,
 					'post_type'    => 'hoteles',
@@ -301,15 +309,15 @@ class Hoteles_Public
 	}
 
 
-	public function form_shortcode()
-	{
+    public function form_shortcode()
+    {
 
-		// Things that you want to do.
-		$checkIn = date("Y-m-d");
-		$checkOut = date("Y-m-d", strtotime($checkIn . "+ 30 days"));
+        // Things that you want to do.
+        $checkIn = date("Y-m-d");
+        $checkOut = date("Y-m-d", strtotime($checkIn . "+ 30 days"));
 
-		$form = '
-	 <form action="" id="searchHotels" method="POST" style="display: flex;justify-content: center;">
+        $form = '
+	 <form action="" id="searchHotels" method="POST" style="display: flex;justify-content: space-around;">
 	 <input type="hidden" value="hotels_form" name="action">
 	 	<div>
 		 	<label class="formLabel">Destino</label><br>
@@ -328,10 +336,10 @@ class Hoteles_Public
 				<input type="date" class="height_inputs" name="salida"  id="checkOut" min="' . $checkIn . '" max="' . $checkOut . '"  required>
 			</div>
 		 </div>
-		 <div style="margin-left: 4vw;">
-			 <div>
-				<label class="formLabel">Adultos</label>
-				<select id="adultos_select" name="adultos" class="height_inputs" required>
+		 <div style="margin-left: 2vw; display: flex;">
+			 <div style="margin-right: 5px;">
+				<label class="formLabel">Adultos</label><br>
+				<select id="adultos_select selects" name="adultos" class="height_inputs" required>
 					<option value="0" selected>0</option>
 					<option value="1">1</option>
 					<option value="2">2</option>
@@ -344,9 +352,9 @@ class Hoteles_Public
 					<option value="9">9</option>
 				</select>
 			 </div>
-			 <div>
-			 	<label class="formLabel">Niños</label>
-				<select id="ninos_select" name="ninos" class="height_inputs" required>
+			 <div style="margin-right: 15px;">
+			 	<label class="formLabel">Niños</label><br>
+				<select id="ninos_select selects" name="ninos" class="height_inputs" required>
 				<option value="0" selected>0</option>
 				<option value="1">1</option>
 				<option value="2" >2</option>
@@ -360,19 +368,19 @@ class Hoteles_Public
 				</select>
 			 </div>
 			 <div>
-			 	<label class="formLabel">Habitaciones</label>
-				<select id="habitaciones_select" name="habitaciones" class="height_inputs" required>
+			 	<label class="formLabel">Habitaciones</label><br>
+				<select id="habitaciones_select selects" name="habitaciones" class="height_inputs" required>
 					<option value="1">1</option>
 					<option value="2" selected>2</option>
 					<option value="3">3</option>
 				</select>
 			 </div>
 		 </div>
-		 <div style="display: flex;align-items: center;margin-left: 2vw;">
-		 	<button type="sumbmit" id="submit_hotels_form" style="padding: 9px;font-size: 15px;">ENVIAR</button>
+		 <div style="display: flex;align-items: center;padding: 11px;">
+		 	<button type="sumbmit" id="submit_hotels_form" style="padding: 9px;font-size: 15px;">BUSCAR</button>
 		 </div>
 	 </form>
 	';
-		return $form;
-	}
+        return $form;
+    }
 }
