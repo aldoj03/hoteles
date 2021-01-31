@@ -26,6 +26,7 @@ if ( ! defined( 'WPINC' ) ) {
 define( 'HOTELES_VERSION', '1.0.0' );
 define('API_KEY', "625f4c71c0828f829bd1c878b4f6c3d6");
 define('SECRET', "e805df16c7");
+define('XML_API', 'http://xml.hotelresb2b.com/xml/listen_xml.jsp');
 
 /**
  * The code that runs during plugin activation.

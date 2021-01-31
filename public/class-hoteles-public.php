@@ -78,6 +78,48 @@ class Hoteles_Public
 		return $page;
 	}
 
+
+    /**
+     * request xml
+     * @param array $query_data
+     */
+    public function handle_post_request_xml($query_data = array())
+    {
+       $get =  wp_remote_get(XML_API .'?codigousu=QPKQ&clausu=xml343188&afiliacio=RS&secacc=136736&xml=<peticion>
+                                            <tipo>110</tipo>
+                                            <nombre>Servicio de disponibilidad por lista de hoteles</nombre>
+                                            <agencia>Agencia Prueba</agencia>
+                                            <parametros>
+                                            <hotel>745388%23</hotel>
+                                            <pais>MV</pais>
+                                            <pais_cliente>ES</pais_cliente>
+                                            <categoria>0</categoria>
+                                            <fechaentrada>02/03/2021</fechaentrada>
+                                            <fechasalida>02/10/2021</fechasalida>
+                                            <afiliacion>RS</afiliacion>
+                                            <usuario>XXXXXXXX</usuario>
+                                            <numhab1>1</numhab1>
+                                            <paxes1>2-0</paxes1>
+                                            <edades1></edades1>
+                                            <numhab2>0</numhab2>
+                                            <paxes2>2-0</paxes2>
+                                            <edades2></edades2>
+                                            <numhab3>0</numhab3>
+                                            <paxes3>2-0</paxes3>
+                                            <edades3></edades3>
+                                            <idioma>1</idioma>
+                                            <informacion_hotel>0</informacion_hotel>
+                                            <tarifas_reembolsables>0</tarifas_reembolsables>
+                                            <comprimido>2</comprimido>
+                                             <gastos>1</gastos>
+                                            </parametros>
+                                            </peticion>');
+
+
+    }
+    /**
+     * request json
+     */
 	public	function handle_post_request()
 	{
 
@@ -99,7 +141,7 @@ class Hoteles_Public
 			$result_array = new stdClass();
 
 			$result_array->hotels = $this->get_hotels_filtered_request($data_query);
-
+			$this->handle_post_request_xml($data_query);
 			if (isset($result_array->hotels)) {
 				$hotels_array_string =  serialize($result_array->hotels);
 
@@ -270,7 +312,10 @@ class Hoteles_Public
 	 <input type="hidden" value="hotels_form" name="action">
 	 	<div>
 		 	<label class="formLabel">Destino</label><br>
-			 <input type="text" size="25" class="height_inputs">
+			<input type="text" size="25" id="site_input" class="height_inputs">
+			<br>
+			<select id="select_input">
+			</select>
 		 </div>
 	 	<div style="display: flex;margin-left: 1vw;">
 			<div style="margin-right: -5vw;">
