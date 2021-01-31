@@ -267,6 +267,9 @@ class Hoteles_Public
 	{
 
 
+	    var_dump($data_query);
+	    die();
+
 		$body = array(
 			"geolocation" => array(
 				"latitude" => $data_query['latitude'],
