@@ -20,6 +20,8 @@ $styles     = plugin_dir_url( __FILE__ )  . 'styles.css';
   <title>FrontHotelesPlugin</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.css" rel="stylesheet" />
+
 <link rel="stylesheet" href="<?=$styles;?>"></head>
 <body >
   <app-root></app-root>
