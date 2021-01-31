@@ -204,7 +204,7 @@ class Hoteles_Public
 		$ids_string = implode(',', $ids);
 		// wp_send_json($ids_string);
 
-		$url = 'https://api.test.hotelbeds.com/hotel-content-api/1.0/hotels?codes=' . $ids_string . '&language=CAS&fields=ranking,description,images,boardCodes';
+		$url = 'https://api.test.hotelbeds.com/hotel-content-api/1.0/hotels?codes=' . $ids_string . '&language=CAS&fields=ranking,description,images,boardCodes,address';
 
 		$getHotelsResponse  = wp_remote_get($url, array(
 			'headers' => array(
@@ -233,6 +233,7 @@ class Hoteles_Public
 			foreach ($arrayDetails->hotels as $key => $details) {
 				if ($details->code == $hotel->code) {
 					$hotel->description = $details->description;
+					$hotel->address = $details->address;
 					$hotel->ranking = $details->ranking;
 
 					$hotel->boardCodes = $details->boardCodes;
