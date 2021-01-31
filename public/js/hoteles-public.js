@@ -12,6 +12,7 @@ window.onload = ()=>{
          const adultos = document.querySelector('#searchHotels #adultos_select').value
          const ninos = document.querySelector('#searchHotels #ninos_select').value
 
+          return false;
          const data = {
              checkIn,
              checkOut,
@@ -61,7 +62,8 @@ jQuery(document).ready(function( $ ){
             type : 'GET',
             dataType : 'json',
             success : function(json) {
-                
+
+                console.log(json)
               
                 let length = json["features"].length
                 for(let i = 0; i < length ; i++){

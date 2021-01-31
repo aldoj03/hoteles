@@ -130,14 +130,21 @@ class Hoteles_Public
 			$adultos = $_POST['adultos'];
 			$ninos = $_POST['ninos'];
 			$habitaciones = $_POST['habitaciones'];
+			$ubicacion = $_POST['ubicacion'];
+			$ubicacion = explode('/', $ubicacion);
+
 			$data_query = array(
 				"checkIn"=>$checkIn,
 				"checkOut"=>$checkOut,
 				"adultos"=>$adultos,
 				"ninos"=>$ninos,
 				"habitaciones"=>$habitaciones,
+                "latitude" => $ubicacion[1],
+                "longitude"=> $ubicacion[0]
 
 			);
+
+
 			$result_array = new stdClass();
 
 			$result_array->hotels = $this->get_hotels_filtered_request($data_query);
@@ -262,8 +269,8 @@ class Hoteles_Public
 
 		$body = array(
 			"geolocation" => array(
-				"latitude" => 39.57119,
-				"longitude" => 2.646633999999949,
+				"latitude" => $data_query['latitude'],
+				"longitude" => $data_query['longitude'],
 				"radius" => 20,
 				"unit" => "km"
 
@@ -323,7 +330,7 @@ class Hoteles_Public
 		 	<label class="formLabel">Destino</label><br>
 			<input type="text" size="25" id="site_input" class="height_inputs">
 			<br>
-			<select id="select_input">
+			<select id="select_input" name="ubicacion">
 			</select>
 		 </div>
 	 	<div style="display: flex;margin-left: 1vw;">
