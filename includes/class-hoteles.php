@@ -144,6 +144,8 @@ class Hoteles {
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $hoteles_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $hoteles_admin, 'enqueue_scripts' );
+		$this->loader->add_action( 'enqueue_scripts', $hoteles_admin, 'enqueue_styles' );
+		$this->loader->add_action( 'enqueue_scripts', $hoteles_admin, 'enqueue_scripts' );
 
 	}
 

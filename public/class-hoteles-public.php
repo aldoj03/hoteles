@@ -46,17 +46,17 @@ class Hoteles_Public
 	 */
 	public function enqueue_styles()
 	{
-
-
-
+		wp_enqueue_style('autocomplete' , plugin_dir_url(__FILE__) . 'css/awesomplete.base.css', array(),'1',false);
+		// wp_enqueue_style('autocompletejscss' , plugin_dir_url(__FILE__) . 'css/autoComplete.min.css', array(),'1',false);
+		wp_enqueue_style('autocomplete2' , plugin_dir_url(__FILE__) . 'css/awesomplete.css', array(),'2',false);
 		wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/hoteles-public.css', array(), $this->version, 'all');
 	}
 
 
 	public function enqueue_scripts()
 	{
-
-
+		// wp_enqueue_script('autocompletejs' , plugin_dir_url(__FILE__) . 'js/autocomplete.js', array(), '3', false);
+		wp_enqueue_script('autocomplete3' , plugin_dir_url(__FILE__) . 'js/awesomplete.min.js', array(), '3', false);
 		wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/hoteles-public.js', array('jquery'), $this->version, false);
 	}
 
@@ -267,8 +267,6 @@ class Hoteles_Public
 	{
 
 
-	    var_dump($data_query);
-	    die();
 
 		$body = array(
 			"geolocation" => array(
@@ -329,12 +327,9 @@ class Hoteles_Public
         $form = '
 	 <form action="" id="searchHotels" method="POST" style="display: flex;justify-content: space-around;">
 	 <input type="hidden" value="hotels_form" name="action">
-	 	<div>
+	 	<div id="input_father">
 		 	<label class="formLabel">Destino</label><br>
-			<input type="text" size="25" id="site_input" class="height_inputs">
-			<br>
-			<select id="select_input" name="ubicacion">
-			</select>
+			<input type="text" size="25" id="site_input" class="height_inputs awesomplete" data-minChars="1">
 		 </div>
 	 	<div style="display: flex;margin-left: 1vw;">
 			<div style="margin-right: -5vw;">
@@ -346,8 +341,8 @@ class Hoteles_Public
 				<input type="date" class="height_inputs" name="salida"  id="checkOut" min="' . $checkIn . '" max="' . $checkOut . '"  required>
 			</div>
 		 </div>
-		 <div style="margin-left: 2vw; display: flex;">
-			 <div style="margin-right: 5px;">
+		 <div style="padding-left: 2vw; display: flex;">
+			 <div style="margin-right: 5px;" class="content-select">
 				<label class="formLabel">Adultos</label><br>
 				<select id="adultos_select selects" name="adultos" class="height_inputs" required>
 					<option value="0" selected>0</option>
@@ -362,7 +357,7 @@ class Hoteles_Public
 					<option value="9">9</option>
 				</select>
 			 </div>
-			 <div style="margin-right: 15px;">
+			 <div style="margin-right: 6px;" class="content-select">
 			 	<label class="formLabel">Niños</label><br>
 				<select id="ninos_select selects" name="ninos" class="height_inputs" required>
 				<option value="0" selected>0</option>
@@ -377,7 +372,7 @@ class Hoteles_Public
 				<option value="9">9</option>
 				</select>
 			 </div>
-			 <div>
+			 <div class="content-select">
 			 	<label class="formLabel">Habitaciones</label><br>
 				<select id="habitaciones_select selects" name="habitaciones" class="height_inputs" required>
 					<option value="1">1</option>
@@ -387,7 +382,7 @@ class Hoteles_Public
 			 </div>
 		 </div>
 		 <div style="display: flex;align-items: center;padding: 11px;">
-		 	<button type="sumbmit" id="submit_hotels_form" style="padding: 9px;font-size: 15px;">BUSCAR</button>
+		 	<button type="sumbmit" id="submit_hotels_form" style="padding: 9px;margin-top: 30px;font-size: 15px;">BUSCAR</button>
 		 </div>
 	 </form>
 	';
