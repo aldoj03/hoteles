@@ -46,9 +46,9 @@ class Hoteles_Public
 	 */
 	public function enqueue_styles()
 	{
-		wp_enqueue_style('autocomplete' , plugin_dir_url(__FILE__) . 'css/awesomplete.base.css', array(),'1',false);
+		// wp_enqueue_style('autocomplete' , plugin_dir_url(__FILE__) . 'css/awesomplete.base.css', array(),'1',false);
 		// wp_enqueue_style('autocompletejscss' , plugin_dir_url(__FILE__) . 'css/autoComplete.min.css', array(),'1',false);
-		wp_enqueue_style('autocomplete2' , plugin_dir_url(__FILE__) . 'css/awesomplete.css', array(),'2',false);
+		// wp_enqueue_style('autocomplete2' , plugin_dir_url(__FILE__) . 'css/awesomplete.css', array(),'2',false);
 		wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/hoteles-public.css', array(), $this->version, 'all');
 	}
 
@@ -56,7 +56,7 @@ class Hoteles_Public
 	public function enqueue_scripts()
 	{
 		// wp_enqueue_script('autocompletejs' , plugin_dir_url(__FILE__) . 'js/autocomplete.js', array(), '3', false);
-		wp_enqueue_script('autocomplete3' , plugin_dir_url(__FILE__) . 'js/awesomplete.min.js', array(), '3', false);
+		// wp_enqueue_script('autocomplete3' , plugin_dir_url(__FILE__) . 'js/awesomplete.min.js', array(), '3', false);
 		wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/hoteles-public.js', array('jquery'), $this->version, false);
 	}
 
@@ -123,15 +123,17 @@ class Hoteles_Public
 	public	function handle_post_request()
 	{
 
-		if (isset($_POST['action']) && $_POST['action'] === 'hotels_form') {
+		if ( isset($_POST['action']) && ($_POST['action'] === 'hotels_form') ) {
 
 			$checkIn = $_POST['entrada'];
 			$checkOut = $_POST['salida'];
 			$adultos = $_POST['adultos'];
 			$ninos = $_POST['ninos'];
 			$habitaciones = $_POST['habitaciones'];
-			$ubicacion = $_POST['ubicacion'];
-			$ubicacion = explode('/', $ubicacion);
+			$ubicacion = $_POST['lat'];
+			$lat_long = explode('/', $ubicacion);
+
+			// die(var_dump($lat_long));
 
 			$data_query = array(
 				"checkIn"=>$checkIn,
@@ -139,8 +141,8 @@ class Hoteles_Public
 				"adultos"=>$adultos,
 				"ninos"=>$ninos,
 				"habitaciones"=>$habitaciones,
-                "latitude" => $ubicacion[1],
-                "longitude"=> $ubicacion[0]
+                "latitude" => $lat_long[1],
+                "longitude"=> $lat_long[0]
 
 			);
 
@@ -191,6 +193,7 @@ class Hoteles_Public
 		$response_decoded = json_decode($response);
 
 		$final_array = new stdClass();
+		// die(var_dump($response_decoded));
 		foreach ($response_decoded->hotels->hotels as $key => $value) {
 
 			array_push($array_ids, $value->code);
@@ -202,8 +205,8 @@ class Hoteles_Public
 		$final_array->checkDays->checkIn = $response_decoded->hotels->checkIn;
 		$final_array->checkDays->checkOut = $response_decoded->hotels->checkOut;
 		$final_array->checkDays->total = $response_decoded->hotels->total;
-		// var_dump($final_array);
-		// die();
+
+		
 		return $final_array;
 	}
 
@@ -327,9 +330,10 @@ class Hoteles_Public
         $form = '
 	 <form action="" id="searchHotels" method="POST" style="display: flex;justify-content: space-around;">
 	 <input type="hidden" value="hotels_form" name="action">
+	 <input type= "hidden" id="lat" name="lat" value="prueba">
 	 	<div id="input_father">
 		 	<label class="formLabel">Destino</label><br>
-			<input type="text" size="25" id="site_input" class="height_inputs awesomplete" data-minChars="1">
+			<input type="text" size="25" id="site_input" autocomplete="off" class="height_inputs awesomplete" data-minChars="1">
 		 </div>
 	 	<div style="display: flex;margin-left: 1vw;">
 			<div style="margin-right: -5vw;">

@@ -1,33 +1,3 @@
-
-window.onload = ()=>{
-
-    //set query information in local storage after submit form hotels
-
-    if(document.querySelector('#submit_hotels_form')){
-        document.querySelector('#submit_hotels_form')
-        .addEventListener('click',()=>{
-         const checkIn = document.querySelector('#searchHotels #checkIn').value
-         const checkOut = document.querySelector('#searchHotels #checkOut').value
-         const hab = document.querySelector('#searchHotels #habitaciones_select').value
-         const adultos = document.querySelector('#searchHotels #adultos_select').value
-         const ninos = document.querySelector('#searchHotels #ninos_select').value
-
-         const data = {
-             checkIn,
-             checkOut,
-             hab,
-             adultos,
-             ninos,
-             lat: 39.57119,
-             lng: 2.646633999999949
-         }
-         window.localStorage.setItem('checkInData',JSON.stringify(data))
-
-        })
-    }
-
-}
-
 jQuery(document).ready(function( $ ){
     let typingTimer
     let site = document.getElementById("site_input")
@@ -37,9 +7,7 @@ jQuery(document).ready(function( $ ){
           site.addEventListener('keyup', function (tecla) {         
               clearTimeout(typingTimer);
               typingTimer = setTimeout(() => autocomplete(document.getElementById("site_input"), countries), doneTypingInterval);
-
           });
-
 
           site.addEventListener('keydown', function () {
               clearTimeout(typingTimer);
@@ -59,7 +27,10 @@ jQuery(document).ready(function( $ ){
                   type : 'GET',
                   dataType : 'json',
                   success : function(json) {
-                    console.log('success')
+                    console.log(json["features"][0]["center"])
+                    let lat = document.getElementById("lat")
+                    lat.setAttribute("value",json["features"][0]["center"][0]+'/'+json["features"][0]["center"][1])
+                    console.log(lat)
                     for(let i = 0; i < json["features"].length ; i++){
                         arr[i] = json["features"][i]["place_name"]
                       }
@@ -141,3 +112,34 @@ jQuery(document).ready(function( $ ){
 });
 
 
+window.onload = ()=>{
+
+  //set query information in local storage after submit form hotels
+
+  if(document.querySelector('#submit_hotels_form')){
+      document.querySelector('#submit_hotels_form')
+      .addEventListener('click',()=>{
+       const checkIn = document.querySelector('#searchHotels #checkIn').value
+       const checkOut = document.querySelector('#searchHotels #checkOut').value
+       const hab = document.getElementById('habitaciones_select selects').value
+       const adultos = document.getElementById('adultos_select selects').value
+       const ninos = document.getElementById('ninos_select selects').value
+       
+       let ubicacion  = document.getElementById("lat").value
+       let array = ubicacion.split("/")
+       
+       const data = {
+           checkIn,
+           checkOut,
+           hab,
+           adultos,
+           ninos,
+           lat: array[0],
+           lng: array[1]
+       }
+       window.localStorage.setItem('checkInData',JSON.stringify(data))
+
+      })
+  }
+
+}
